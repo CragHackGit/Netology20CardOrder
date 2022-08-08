@@ -45,5 +45,16 @@ public class CardFormRequestTest {
         assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.", text.trim());
     }
 
+    @Test
+    public void shouldValidateName() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Immortal Horacio");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+88888888888");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.cssSelector("button")).click();
+        String actual = driver.findElement(By.cssSelector("[data-test-id=name].input_invalid .input__sub")).getText().trim();
+        String expected = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
+        assertEquals(expected, actual);
+    }
+
 
 }
