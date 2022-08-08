@@ -9,6 +9,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CardFormRequestTest {
     public WebDriver driver;
@@ -85,6 +86,11 @@ public class CardFormRequestTest {
         String expected = "Поле обязательно для заполнения";
         assertEquals(expected, actual);
     }
-
-
+    @Test
+    public void shouldValidateAgreement() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Бессмертный Горацио");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+88888888888");
+        driver.findElement(By.cssSelector("button")).click();
+        assertTrue(driver.findElement(By.cssSelector("[data-test-id=agreement].input_invalid")).isDisplayed());
+    }
 }
