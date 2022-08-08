@@ -10,7 +10,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 public class CardFormRequestTest {
     public WebDriver driver;
 
@@ -53,6 +52,37 @@ public class CardFormRequestTest {
         driver.findElement(By.cssSelector("button")).click();
         String actual = driver.findElement(By.cssSelector("[data-test-id=name].input_invalid .input__sub")).getText().trim();
         String expected = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldValidatePhone() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Бессмертный Горацио");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+111");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.cssSelector("button")).click();
+        String actual = driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText().trim();
+        String expected = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldNotSendWithEmptyName() {
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+88888888888");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.cssSelector("button")).click();
+        String actual = driver.findElement(By.cssSelector("[data-test-id=name].input_invalid .input__sub")).getText().trim();
+        String expected = "Поле обязательно для заполнения";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldNotSendWithEmptyPhone() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Бессмертный Горацио");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.cssSelector("button")).click();
+        String actual = driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText().trim();
+        String expected = "Поле обязательно для заполнения";
         assertEquals(expected, actual);
     }
 
